@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.http import HttpResponse
-import win32com.client as win32
+#import win32com.client as win32
 from bootstrap_modal_forms.generic import BSModalCreateView
 from django.urls import reverse
 from datetime import date, timedelta
@@ -260,27 +260,27 @@ class VCIUpdateReturnView(UpdateView):
 
 
 
-def redirect_logic_func(request):
-    import pythoncom
-    pythoncom.CoInitialize()
-    filia = request.POST.get('data')
-    outlook = win32.Dispatch('outlook.application')
-    mail = outlook.CreateItem(0)
-    mail.To = ""
-    mail.Subject = ""
-    mail.HtmlBody = filia
-    mail.Display(True)
-
-
-
 #def redirect_logic_func(request):
+#    import pythoncom
+#    pythoncom.CoInitialize()
+#    filia = request.POST.get('data')
+#    outlook = win32.Dispatch('outlook.application')
+#    mail = outlook.CreateItem(0)
+#    mail.To = ""
+#    mail.Subject = ""
+#    mail.HtmlBody = filia
+#    mail.Display(True)
+
+
+
+def redirect_logic_func(request):
     #filia = request.POST.get('data')
     #print(filia)
     #send_mail('temat', filia, 'delphi', ['grzegorz.dziadkowiec@gmail.com'])
     #return HttpResponse(filia)
-#    VCI = request.POST.get('salesPersonDistributor')
-#    obj = str(SalesPersonDistributor.objects.filter(idSalesPersonDistributor=VCI).values('phone'))
-#    send_mail('temat', obj, 'delphi', ['demovcimanage@gmail.com'])
+    VCI = request.POST.get('salesPersonDistributor')
+    obj = str(SalesPersonDistributor.objects.filter(idSalesPersonDistributor=VCI).values('phone'))
+    send_mail('temat', obj, 'delphi', ['demovcimanage@gmail.com'])
 #    def get(self, request, form, **kwargs):
 #        cos1 = kwargs.get('pk')
 #        obj = VCI.objects.filter(VCInumber=cos1)
