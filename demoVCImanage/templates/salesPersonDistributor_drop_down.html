@@ -1,0 +1,7 @@
+<option value="">---------</option>
+<option class="btn btn-success btn-lg btn-block" id="new" value="new">Nowy przedstawiciel</option><hr>
+<option style="text-align:center" disabled>────────────────────</option>
+{% for salesPersonDistributor in salesPersonsDistributor %}
+<option value="{{ salesPersonDistributor.pk }}">{{ salesPersonDistributor.name }}</option>
+{% endfor %}
+<option id="new" value="new">New person</option>

@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<div class="container">
+  <div class="row justify-content-center" id="dist">
+    <div class="" style="margin:40px margin-top:20px" id="choice">
+      <form method="post" id="workshopForm" data-workshops-url="{% url 'ajax_load_workshops' %}">
+
+          {% csrf_token %}
+          {% for field in form.visible_fields %}
+          <br><label style="font-size:23px" for="{{ field.auto_id }}">{{ field.label }}</label><br>
+            {{ field }}
+          {% endfor %}
+
+      <input type="hidden" name="build" value="{{ vci }}">
+      <br><br><button type="button" class='btn btn-outline-primary btn-lg btn-block' id="delivery">Zamów kuriera</button><br><br>
+      <input id="submit" type="submit" class='btn btn-lg btn-block' style="background-color:#1e58aa; color:white" value="Zapisz" name="{{ form.prefix }}" />
+      </form>
+    </div>
+    <form method="post">
+      <div class="modal" tabindex="-1" id="modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Nowy warsztat</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+               {% csrf_token %}
+               {{ form2 }}
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button  class="btn" style="background-color:#1e58aa; color:white" type="submit" value="save" name="{{ form2.prefix }}">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div div class="" style="width:600px; margin:40px; margin-left:100px; margin-top:28px; text-align:center" id="filia" data-filia-url="{% url 'get_data' %}">
+      <div class="row">
+        <table class="table table-sm table-borderless">
+          <h style="font-size:23px; padding-left:35px">Adres odbioru:</h>
+          <br><br>
+
+          {% if VCIUpdate.salesPersonDistributor != none %}
+
+            <tr>
+              <th>Filia:</th>
+                <td>{{ VCIUpdate.salesPersonDistributor.subsidiary }}</td>
+            </tr>
+            <tr>
+              <th>Kontakt:</th>
+                <td>{{ VCIUpdate.salesPersonDistributor.name }} {{ VCIUpdate.salesPersonDistributor.surname }}</td>
+            </tr>
+            <tr>
+              <th>Telefon:</th>
+                <td>{{ VCIUpdate.salesPersonDistributor.phone }}</td>
+            </tr>
+            <tr>
+              <th>Kontakt:</th>
+                <td>{{ VCIUpdate.salesPersonDistributor.email }}</td>
+            </tr>
+            <tr>
+              <th>Ulica:</th>
+                <td>{{ VCIUpdate.salesPersonDistributor.subsidiary.street }}</td>
+            </tr>
+            <tr>
+              <th>Miasto:</th>
+                <td>{{ VCIUpdate.salesPersonDistributor.subsidiary.city }}</td>
+            </tr>
+            <tr>
+              <th>Kod pocztowy:</th>
+                <td>{{ VCIUpdate.salesPersonDistributor.subsidiary.postal }}</td>
+            </tr>
+
+          {% else %}
+          <tr>
+            <th>Nazwa warsztatu:</th>
+              <td>{{ VCIUpdate.workshop.workshopName }}</td>
+          </tr>
+          <tr>
+            <th>Ulica:</th>
+              <td>{{ VCIUpdate.workshop.street }}</td>
+          </tr>
+          <tr>
+            <th>Miasto:</th>
+              <td>{{ VCIUpdate.workshop.city }}</td>
+          </tr>
+          <tr>
+            <th>Kod pocztowy:</th>
+              <td>{{ VCIUpdate.workshop.postal }}</td>
+          </tr>
+          <tr>
+            <th>Osoba kontaktowa:</th>
+              <td>{{ VCIUpdate.workshop.contacName }} {{ VCIUpdate.workshop.contactSurname }}</td>
+          </tr>
+          <tr>
+            <th>Telefon:</th>
+              <td>{{ VCIUpdate.workshop.phone }}</td>
+          </tr>
+          <tr>
+            <th>e-mail:</th>
+              <td>{{ VCIUpdate.workshop.email }}</td>
+          </tr>
+          {% endif %}
+        </table>
+      </div>
+      <hr>
+      <div class="row" id='address' data-workshopAddressDelivery-url="{% url 'ajax_load_workshopAddressDelivery' %}">
+      </div>
+    </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+      <div class="modal-dialog" role="document">
+      <div class="modal-content"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function(){
+    var url = $("#workshopForm").attr("data-workshops-url");
+    $("#filia").hide();
+    $("#delivery").hide();
+    $("#submit").hide();
+
+      $.ajax({
+        url: url,
+        success: function(data){
+          $("#id_formv-workshop").html(data);
+        }
+        });
+  });
+
+  $("#id_formv-workshop").change(function() {
+    var workshopId = $(this).val();
+    var url = $("#address").attr("data-workshopAddressDelivery-url");
+
+    if (workshopId == "new") {
+      $("#modal").modal('toggle')
+    } else {
+    $.ajax({
+      url: url,
+      data: {
+        'workshop': workshopId
+      },
+      success: function(data) {
+        $("#address").html(data);
+        $("#delivery").show(150);
+        $("#submit").show(150);
+
+      }
+    });
+    }
+  });
+
+  $("#delivery").click(function(){
+
+    if ($("#filia").is(":visible")){
+      $('#filia').hide("slow");
+      $('#delivery').text('Zamów kuriera');
+      $('#submit').val('Zapisz');
+
+   } else {
+     $('#delivery').text('Jednak nie zamawiaj kuriera');
+     $('#submit').val('Zapisz i zamów kuriera');
+     $('#filia').show("slow");
+   }
+  });
+
+
+  $("#submit").click(function(){
+    var get_filia = $("#filia").html();
+    var url = $("#filia").attr("data-filia-url");
+
+    if ($("#filia").is(":visible")){
+      $.ajax({
+        type: "POST",
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        url: url,
+        data: {
+          'data': get_filia
+        },
+        success: function(result){
+          alert("success");
+        }
+      });
+    }
+  });
+
+
+</script>
+{% endblock %}

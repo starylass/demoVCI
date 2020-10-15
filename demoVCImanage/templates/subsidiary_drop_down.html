@@ -1,0 +1,6 @@
+<option value="">---------</option>
+<option class="btn btn-success btn-lg btn-block" id="new" value="new">Nowa filia</option><hr>
+<option style="text-align:center" disabled>────────────────────</option>
+{% for subsidiary in subsidiaries %}
+<option value="{{ subsidiary.pk }}">{{ subsidiary.name }}</option>
+{% endfor %}

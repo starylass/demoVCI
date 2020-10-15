@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+  <div class="row justify-content-center py-4">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Numer seryjny</th>
+          <th>Licencja Car</th>
+          <th>Licencja HD</th>
+          <th>Właściciel</th>
+          <th>Wypożyczony</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for item in VCI %}
+        <tr>
+          {% if item.lent == True %}
+            <td class="align-middle"><span class='dot' style="background-color:red"></span></td>
+          {% else %}
+            <td class="align-middle"><span class='dot' style="background-color:green"></span></td>
+          {% endif %}
+          <td class="align-middle">{{ item.VCInumber }}</td>
+          <td class="align-middle">{{ item.Car|yesno:"Tak,Nie" }}</td>
+          <td class="align-middle">{{ item.Truck|yesno:"Tak,Nie" }}</td>
+          <td class="align-middle">{{ item.salesPersonDelphi }}</td>
+          <td class="align-middle">
+            {% if item.salesPersonDistributor is none and item.workshop is none %}
+              Zwrócony
+            {% else %}
+              {% if item.salesPersonDistributor is none %}
+                {{ item.workshop }}
+              {% else %}
+                {{ item.salesPersonDistributor }}
+              {% endif %}
+            {% endif %}
+          </td>
+          <td class="align-middle">
+            <div class="dropdown">
+              <button class="btn dropdown-toggle" style="background-color:#1e58aa; color:white" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Wypożycz
+              </button>
+              <div class="dropdown-menu" aria-lebelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{% url 'VCIUpdate' item.VCInumber %}">Dystrybutor</a>
+                <a class="dropdown-item" href="{% url 'VCIworkshopUpdate' item.VCInumber %}">Warsztat / Delphi - wewnętrznie</a>
+                <a class="dropdown-item" href="{% url 'VCIUpdateReturn' item.VCInumber %}">Zwrot</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <br><br>
+  <img src="{% static 'image/DIAG_014_DS150_VCI_.RGB.jpeg' %}" style="opacity:0.8" class="rounded float-right" / >
+</div>
+{% endblock %}

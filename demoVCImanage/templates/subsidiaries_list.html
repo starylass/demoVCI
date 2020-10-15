@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<br>
+<div class='container'>
+  <div class="text-center">
+      {% for item in subsidiary_of_dist %}
+        {% if item.idSubsidiary in salesPersonDistributor_sub %}
+          <a class="btn btn-lg mr-2 my-2 shadow" style="background-color: #1e58aa; color:white" href="{% url 'SalesPersonDistributor' item.idSubsidiary %}" role="button" method="post">{{ item }}</a>
+        {% else %}
+          <a class="btn btn-secondary btn-lg mr-2 my-2" href="{% url 'SalesPersonDistributor' item.idSubsidiary %}" role="button" method="post">{{ item }}</a>
+        {% endif %}
+      {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

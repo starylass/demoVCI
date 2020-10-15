@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container" id="container">
+  <div class="row justify-content-center" id="dist">
+    <div class="" style="margin:40px margin-top:20px" id="choice">
+      <form method="post" id="subsidiaryForm"  name="text" data-subsidiaries-url="{% url 'ajax_load_subsiriaies' %}" data-salesPersonsDistributor-url="{% url 'ajax_load_salesPersonsDistributor' %}" data-salesPersonsDistributorContact-url="{% url 'ajax_load_salesPersonsDistributorContact' %}" novalidate>
+
+          {% csrf_token %}
+          {% for field in form.visible_fields %}
+          <br><label style="font-size:23px" for="{{ field.auto_id }}">{{ field.label }}</label><br>
+            {{ field }}
+          {% endfor %}
+
+      <input type="hidden" name="build" value="{{ VCIUpdate }}">
+      <br><br><button type="button" class='btn btn-outline-primary btn-lg btn-block shadow' id="delivery">Zamów kuriera</button><br><br>
+      <input id="submit" type="submit" class='btn btn-lg btn-block shadow' style="background-color:	#1e58aa; color:white" value="Zapisz" />
+      </form>
+    </div>
+      <div class="" style="width:600px; margin:40px; margin-left:100px; margin-top:28px; text-align:center" id="filia" data-filia-url="{% url 'get_data' %}">
+        <div class="row">
+          <table class="table table-sm table-borderless">
+              <h style="font-size:23px; padding-left:35px">Adres odbioru:</h>
+              <br><br>
+
+            {% if VCIUpdate.salesPersonDistributor != none %}
+
+              <tr>
+                <th>Filia:</th>
+                  <td>{{ VCIUpdate.salesPersonDistributor.subsidiary }}</td>
+              </tr>
+              <tr>
+                <th>Kontakt:</th>
+                  <td>{{ VCIUpdate.salesPersonDistributor.name }} {{ VCIUpdate.salesPersonDistributor.surname }}</td>
+              </tr>
+              <tr>
+                <th>Telefon:</th>
+                  <td>{{ VCIUpdate.salesPersonDistributor.phone }}</td>
+              </tr>
+              <tr>
+                <th>Kontakt:</th>
+                  <td>{{ VCIUpdate.salesPersonDistributor.email }}</td>
+              </tr>
+              <tr>
+                <th>Ulica:</th>
+                  <td>{{ VCIUpdate.salesPersonDistributor.subsidiary.street }}</td>
+              </tr>
+              <tr>
+                <th>Miasto:</th>
+                  <td>{{ VCIUpdate.salesPersonDistributor.subsidiary.city }}</td>
+              </tr>
+              <tr>
+                <th>Kod pocztowy:</th>
+                  <td>{{ VCIUpdate.salesPersonDistributor.subsidiary.postal }}</td>
+              </tr>
+
+            {% elif VCIUpdate.workshop != none %}
+
+              <tr>
+                <th>Nazwa warsztatu:</th>
+                  <td>{{ VCIUpdate.workshop.workshopName }}</td>
+              </tr>
+              <tr>
+                <th>Ulica:</th>
+                  <td>{{ VCIUpdate.workshop.street }}</td>
+              </tr>
+              <tr>
+                <th>Miasto:</th>
+                  <td>{{ VCIUpdate.workshop.city }}</td>
+              </tr>
+              <tr>
+                <th>Kod pocztowy:</th>
+                  <td>{{ VCIUpdate.workshop.postal }}</td>
+              </tr>
+              <tr>
+                <th>Osoba kontaktowa:</th>
+                  <td>{{ VCIUpdate.workshop.contacName }} {{ VCIUpdate.workshop.contactSurname }}</td>
+              </tr>
+              <tr>
+                <th>Telefon:</th>
+                  <td>{{ VCIUpdate.workshop.phone }}</td>
+              </tr>
+              <tr>
+                <th>e-mail:</th>
+                  <td>{{ VCIUpdate.workshop.email }}</td>
+              </tr>
+            {% else %}
+              <tr>
+                <th>Kontakt:</th>
+                  <td>{{ VCIUpdate.salesPersonDelphi.name }}  {{ VCIUpdate.salesPersonDelphi.surname }}</td>
+              </tr>
+            {% endif %}
+          </table>
+          <br>
+        </div>
+        <hr>
+        <div class="row" id="salesPersonsDistributorContact">
+        </div>
+        <div class="row" style="margin-top:-14px" id='address' data-subsidiaryAddressDelivery-url="{% url 'ajax_load_subsidiaryAddressDelivery' %}">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content"></div>
+    </div>
+<!--  </div>
+  <button id="new_sales_person_distibutor" class="btn btn-primary" type="button" name="button">Dodaj przedstawiciela</button>
+</div>-->
+
+ <script>
+// with page load hide some content
+   $(document).ready(function()
+   {
+     $("#subsidiaryForm").show();
+
+     $('#id_subsidiary').hide();
+     $("label[for='id_subsidiary']").hide();
+     $('#id_salesPersonDistributor').hide();
+     $("label[for='id_salesPersonDistributor']").hide();
+     $("#filia").hide();
+     $('#delivery').hide();
+     $('#submit').hide();
+   }),
+
+
+// load susidiary base on distrubutor
+   $("#id_distributor").change(function () {
+     var url = $("#subsidiaryForm").attr("data-subsidiaries-url");
+     var distributorId = $(this).val();
+
+
+     $.ajax({
+       url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+       data: {
+         'distributor': distributorId      // add the country id to the GET parameters
+       },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+         $("#id_subsidiary").html(data);  // replace the contents of the city input with the data that came from the server
+         $("#id_salesPersonDistributor").html('');
+         $('#id_subsidiary').show(150);
+         $("label[for='id_subsidiary']").show(150);
+       }
+     });
+   });
+
+//load sales force of subsiriary
+   $("#id_subsidiary").change(function () {
+     var url = $("#subsidiaryForm").attr("data-salesPersonsDistributor-url");  // get the url of the `load_cities` view
+     var subsidiaryId = $(this).val();  // get the selected country ID from the HTML input
+     var url_address = $("#address").attr("data-subsidiaryAddressDelivery-url");
+     var distributorId = $("#id_distributor").val();
+
+     if (subsidiaryId == "new") {
+         $("#id_subsidiary").modalForm({
+            formURL: "{% url 'new_subsidiary' VCIUpdate %}"
+          });
+     } else {
+     $.ajax({                       // initialize an AJAX request
+       url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+       data: {
+         'subsidiary': subsidiaryId       // add the country id to the GET parameters
+       },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+         $("#id_salesPersonDistributor").html(data);  // replace the contents of the city input with the data that came from the server
+         $('#id_salesPersonDistributor').show(150);
+         $("label[for='id_salesPersonDistributor']").show(150);
+       }
+     });
+
+     $('#id_salesPersonDistributor').change(function(){
+       var salesDist = $(this).val();
+
+       if (salesDist != "new") {
+       $('#delivery').show(150);
+       $('#submit').show(150);
+      }
+     });
+// load subsidiary address
+    $.ajax({
+      url: url_address,
+      data: {
+          'subsidiary': subsidiaryId
+      },
+      success: function(data) {
+        $("#address").html(data);
+      }
+    });
+   }
+  });
+
+// load sales person - distributor data
+   $("#id_salesPersonDistributor").change(function () {
+     var url = $("#subsidiaryForm").attr("data-salesPersonsDistributorContact-url");
+     var salesPersonDistributorId = $(this).val();
+     var id_sales = $(this).children(":selected").attr("id");
+
+     if (id_sales == "new") {
+       $("#id_salesPersonDistributor").modalForm({
+           formURL: "{% url 'new_sales_person_distibutor' VCIUpdate %}"
+      });
+     } else {
+     $.ajax({
+       url: url,
+       data: {
+         'salesPersonDistributor': salesPersonDistributorId
+       },
+       success: function (data) {
+         $("#salesPersonsDistributorContact").html(data);
+       }
+     });
+   }
+   });
+
+   $("#delivery").click(function(){
+
+     if ($("#filia").is(":visible")){
+       $('#filia').hide("slow");
+       $('#delivery').text('Zamów kuriera');
+       $('#submit').val('Zapisz');
+
+    } else {
+      $('#delivery').text('Jednak nie zamawiaj kuriera');
+      $('#submit').val('Zapisz i zamów kuriera');
+      $('#filia').show("slow");
+    }
+   });
+
+
+   $("#submit").click(function(){
+     var get_filia = $("#filia").html();
+     var url = $("#filia").attr("data-filia-url");
+
+
+     if ($("#filia").is(":visible")){
+
+       $.ajax({
+         type: "POST",
+         headers: {'X-CSRFToken': '{{ csrf_token }}'},
+         url: url,
+         data: {
+           'data': get_filia
+         },
+         success: function(result){
+           alert("success");
+         }
+       });
+     }
+   });
+
+
+ </script>
+{% endblock %}

@@ -1,0 +1,59 @@
+<html>
+  <form action="." method="post" id="subsidiaryForm" style="display:none" data-subsidiaries-url="{% url 'ajax_load_subsiriaies' %}" data-salesPersonsDistributor-url="{% url 'ajax_load_salesPersonsDistributor' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save" />
+  </form>
+</html>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+ <script>
+
+   $(document).ready(function()
+   {
+     $("#subsidiaryForm").show();
+     $('#id_subsidiary').hide();
+     $("label[for='id_subsidiary']").hide();
+
+     $('#id_salesPersonDistributor').hide();
+     $("label[for='id_salesPersonDistributor']").hide();
+   }),
+
+   $("#id_distributor").change(function () {
+     var url = $("#subsidiaryForm").attr("data-subsidiaries-url");  // get the url of the `load_cities` view
+     var distributorId = $(this).val();  // get the selected country ID from the HTML input
+
+     $.ajax({                       // initialize an AJAX request
+       url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+       data: {
+         'distributor': distributorId       // add the country id to the GET parameters
+       },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+         $("#id_subsidiary").html(data);  // replace the contents of the city input with the data that came from the server
+         $("#id_salesPersonDistributor").html('');
+         $('#id_subsidiary').show();
+         $("label[for='id_subsidiary']").show();
+       }
+     });
+
+   });
+
+   $("#id_subsidiary").change(function () {
+     var url = $("#subsidiaryForm").attr("data-salesPersonsDistributor-url");  // get the url of the `load_cities` view
+     var subsidiaryId = $(this).val();  // get the selected country ID from the HTML input
+
+     $.ajax({                       // initialize an AJAX request
+       url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+       data: {
+         'subsidiary': subsidiaryId       // add the country id to the GET parameters
+       },
+       success: function (data) {   // `data` is the return of the `load_cities` view function
+         $("#id_salesPersonDistributor").html(data);  // replace the contents of the city input with the data that came from the server
+         $('#id_salesPersonDistributor').show();
+         $("label[for='id_salesPersonDistributor']").show();
+       }
+     });
+
+   });
+ </script>

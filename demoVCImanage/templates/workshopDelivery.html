@@ -1,0 +1,36 @@
+<h style="font-size:23px; padding-left:35px">Adres dostawy:</h>
+<br><br>
+  <table class="table table-sm table-borderless">
+    <tbody>
+      {% for item in workshopDelivery %}
+      <tr>
+        <th>Nazwa warsztatu:</th>
+          <td>{{ item.workshopName }}</td>
+      </tr>
+      <tr>
+        <th>Ulica:</th>
+          <td>{{ item.street }}</td>
+      </tr>
+      <tr>
+        <th>Miasto:</th>
+          <td>{{ item.city }}</td>
+      </tr>
+      <tr>
+        <th>Postal:</th>
+          <td>{{ item.postal }}</td>
+      </tr>
+      <tr>
+        <th>Kontakt:</th>
+          <td>{{ item.contactName }} {{ item.contactSurname }}</td>
+      </tr>
+      <tr>
+        <th>Phone:</th>
+          <td>{{ item.phone }}</td>
+      </tr>
+      <tr>
+        <th>e-mail:</th>
+          <td>{{ item.email }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>

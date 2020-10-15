@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<div class='container'>
+    <div class="text-center">
+
+      {% for item in distributor %}
+        {% if item.idDistributor in distWithVCI %}
+          <p><a class="btn btn-lg mr-4 my-2 shadow p-3" style="background-color:#1e58aa; color:white" href="{% url 'Subsidiaries' item.idDistributor %}" role="button" method="post">{{ item }}</a></p>
+        {% else %}
+          <p><a class="btn btn-secondary btn-lg mr-4 my-2" href="{% url 'Subsidiaries' item.idDistributor %}" role="button" method="post">{{ item }}</a></p>
+        {% endif %}
+      {% endfor %}
+
+  </div>
+</div>
+
+
+{% endblock %}

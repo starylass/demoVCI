@@ -1,0 +1,6 @@
+<option value="">---------</option>
+<option class="btn btn-success btn-lg btn-block" id="new" value="new">Nowy warsztat</option><hr>
+<option style="text-align:center" disabled>────────────────────</option>
+{% for workshop in workshops %}
+  <option value="{{ workshop.pk }}">{{ workshop.workshopName }}</option>
+{% endfor %}

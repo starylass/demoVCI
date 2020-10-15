@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<br>
+<div class='container'>
+  <div class="row justify-content-md-center py-4">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Imię</th>
+          <th>Nazwisko</th>
+          <th>e-mail</th>
+          <th>Telefon</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for salesPersonDistributor in salesPersonDistributor %}
+            {% if salesPersonDistributor.idSalesPersonDistributor in vcilent %}
+
+              <tr style="background-color: #ADD8E6">
+                <td>{{ salesPersonDistributor.name }}</td>
+                <td>{{ salesPersonDistributor.surname }}</td>
+                <td>{{ salesPersonDistributor.email }}</td>
+                <td>{{ salesPersonDistributor.phone }}</td>
+                <td><a href="{% url 'SalesPersonDistributorHistory' salesPersonDistributor.idSalesPersonDistributor %}" class="btn btn-sm" style="background-color:	#1e58aa; color:white" role="button">Historia</a></td>
+              </tr>
+            {% else %}
+
+            <tr>
+              <td>{{ salesPersonDistributor.name }}</td>
+              <td>{{ salesPersonDistributor.surname }}</td>
+              <td>{{ salesPersonDistributor.email }}</td>
+              <td>{{ salesPersonDistributor.phone }}</td>
+              <td><a href="{% url 'SalesPersonDistributorHistory' salesPersonDistributor.idSalesPersonDistributor %}" class="btn btn-sm" style="background-color:	#1e58aa; color:white" role="button">Historia</a></td>
+            </tr>
+
+            {% endif %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

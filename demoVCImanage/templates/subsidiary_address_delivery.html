@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <table class="table table-sm table-borderless">
+    <tbody>
+      {% for item in subsidiary_address %}
+      <tr>
+        <th>Ulica:</th>
+          <td value="{{ subsidiary.pk }}">{{ item.street }}</td>
+      </tr>
+      <tr>
+        <th>Miasto:</th>
+          <td value="{{ subsidiary.pk }}">{{ item.city }}</td>
+      </tr>
+      <tr>
+        <th>Kod pocztowy:</th>
+          <td value="{{ subsidiary.pk }}">{{ item.postal }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+  </table>
+</html>

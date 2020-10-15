@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <h style="font-size:23px; padding-left:35px">Adres dostawy:</h>
+  <br><br>
+    <table class="table table-sm table-borderless">
+      <tbody>
+        {% for item in salesPersonDistributor_contact %}
+        <tr>
+          <th>Filia:</th>
+            <td value="{{ salesPersonDistributor.pk }}">{{ item.subsidiary }}</td>
+        </tr>
+        <tr>
+          <th>Kontakt:</th>
+            <td value="{{ salesPersonDistributor.pk }}">{{ item.name }} {{ item.surname }}</td>
+        </tr>
+        <tr>
+          <th>Telefon:</th>
+            <td value="{{ salesPersonDistributor.pk }}">{{ item.phone }}</td>
+        </tr>
+        <tr>
+          <th>E-mail:</th>
+            <td value="{{ salesPersonDistributor.pk }}">{{ item.email }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+</html>

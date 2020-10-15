@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+  <div class="row justify-content-md-center py-4">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Imię</th>
+          <th>Nazwisko</th>
+          <th>email</th>
+          <th>Phone</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for item in salesPersonDelphi %}
+        <tr>
+          <td>{{ item.name }}</td>
+          <td>{{ item.surname }}</td>
+          <td>{{ item.email }}</td>
+          <td>{{ item.phone }}</td>
+          <td><a href="{% url 'VCIsalesPersonDelphi' item.idSalesPerson %}" class="btn btn-sm" style="background-color:	#1e58aa; color:white" role="button">Testery</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
