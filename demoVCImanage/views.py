@@ -281,7 +281,7 @@ def redirect_logic_func(request):
     #return HttpResponse(filia)
     VCI = request.POST.get('salesPersonDistributor')
     filia = strip_tags(request.POST.get('data'))
-    send_mail('temat', filia, 'delphi', ['demovcimanage@gmail.com'])
+    send_mail('temat', filia, 'delphi', ['grzegorz.dziadkowiec@delphi.com'])
 #    def get(self, request, form, **kwargs):
 #        cos1 = kwargs.get('pk')
 #        obj = VCI.objects.filter(VCInumber=cos1)
