@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from bootstrap_modal_forms.generic import BSModalCreateView
 from django.urls import reverse
 from datetime import date, timedelta
+from django.utils.html import strip_tags
 
 
 
@@ -279,8 +280,8 @@ def redirect_logic_func(request):
     #send_mail('temat', filia, 'delphi', ['grzegorz.dziadkowiec@gmail.com'])
     #return HttpResponse(filia)
     VCI = request.POST.get('salesPersonDistributor')
-    obj = str(SalesPersonDistributor.objects.filter(idSalesPersonDistributor=VCI).values('phone'))
-    send_mail('temat', obj, 'delphi', ['demovcimanage@gmail.com'])
+    filia = strip_tags(request.POST.get('data'))
+    send_mail('temat', filia, 'delphi', ['demovcimanage@gmail.com'])
 #    def get(self, request, form, **kwargs):
 #        cos1 = kwargs.get('pk')
 #        obj = VCI.objects.filter(VCInumber=cos1)
