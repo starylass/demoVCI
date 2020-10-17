@@ -9,7 +9,7 @@
           {% csrf_token %}
           {{ form.as_table }}
         </table>
-      <input type="hidden" name="build" value="{{ VCIUpdate }}">
+      <input id="hidden" type="hidden" name="build" value="{{ VCIUpdate }}">
       <h style="font-size:23px; text-align:center">Tutaj możesz zwrócić tester do właściciela:</h>
       <br><br><button type="button" class='btn btn-lg btn-block' style="background-color:	#1e58aa; color:white" id="goto">Przejdz dalej</button><br><br>
       <button type="button" class='btn btn-outline-primary btn-lg btn-block' id="delivery">Zamów kuriera</button><br><br>
@@ -169,15 +169,18 @@
    $("#submit").click(function(){
      var get_filia = $("#filia").html();
      var url = $("#filia").attr("data-filia-url");
+     var vci = $("#hidden").val();
 
 
      if ($("#filia").is(":visible")){
+
        $.ajax({
          type: "POST",
          headers: {'X-CSRFToken': '{{ csrf_token }}'},
          url: url,
          data: {
-           'data': get_filia
+           'data': get_filia,
+           'vci': vci
          },
          success: function(result){
            alert("success");

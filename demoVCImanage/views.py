@@ -281,12 +281,12 @@ def redirect_logic_func(request):
     #print(filia)
     #send_mail('temat', filia, 'delphi', ['grzegorz.dziadkowiec@gmail.com'])
     #return HttpResponse(filia)
+    vci = request.POST.get('vci')
     filia = request.POST.get('data')
     with open('demoVCImanage//templates//email.html', 'w', encoding='utf-8') as f:
         f.write(filia)
     rendered = render_to_string('emailhead.html') + render_to_string('email.html')
-    print(rendered)
-    send_mail('temat','', 'delphi', ['demovcimanage@gmail.com'], html_message=rendered)
+    send_mail('Wysyłka testera: ' + vci,'', 'delphi', ['demovcimanage@gmail.com'], html_message=rendered)
 #    def get(self, request, form, **kwargs):
 #        cos1 = kwargs.get('pk')
 #        obj = VCI.objects.filter(VCInumber=cos1)

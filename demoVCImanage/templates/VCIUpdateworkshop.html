@@ -13,7 +13,7 @@
             {{ field }}
           {% endfor %}
 
-      <input type="hidden" name="build" value="{{ vci }}">
+      <input id="hidden" type="hidden" name="build" value="{{ vci }}">
       <br><br><button type="button" class='btn btn-outline-primary btn-lg btn-block' id="delivery">Zamów kuriera</button><br><br>
       <input id="submit" type="submit" class='btn btn-lg btn-block' style="background-color:#1e58aa; color:white" value="Zapisz" name="{{ form.prefix }}" />
       </form>
@@ -185,6 +185,8 @@
   $("#submit").click(function(){
     var get_filia = $("#filia").html();
     var url = $("#filia").attr("data-filia-url");
+    var vci = $("#hidden").val();
+
 
     if ($("#filia").is(":visible")){
       $.ajax({
@@ -192,7 +194,8 @@
         headers: {'X-CSRFToken': '{{ csrf_token }}'},
         url: url,
         data: {
-          'data': get_filia
+          'data': get_filia,
+          'vci': vci
         },
         success: function(result){
           alert("success");
