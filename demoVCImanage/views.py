@@ -11,7 +11,9 @@ from bootstrap_modal_forms.generic import BSModalCreateView
 from django.urls import reverse
 from datetime import date, timedelta
 from django.utils.html import strip_tags
-
+import os
+import pathlib
+from django.template.loader import get_template
 
 
 
@@ -176,7 +178,7 @@ class VCIUpdateView(UpdateView):
             obj.lendDate = date.today()
             try:
                 hist = obj.history.first()
-                hist.returnDate = date.today() + timedelta(days=4)
+                hist.returnDate = date.today()
                 hist.save()
             except AttributeError:
                 pass
@@ -225,7 +227,7 @@ class VCIworkshopUpdateView(UpdateView):
             obj.lendDate = date.today()
             try:
                 hist = obj.history.first()
-                hist.returnDate = date.today() + timedelta(days=4)
+                hist.returnDate = date.today()
                 hist.save()
             except AttributeError:
                 pass
@@ -253,7 +255,7 @@ class VCIUpdateReturnView(UpdateView):
             obj.workshop = None
             try:
                 hist = obj.history.first()
-                hist.returnDate = date.today() + timedelta(days=4)
+                hist.returnDate = date.today()
                 hist.save()
             except AttributeError:
                 pass
@@ -279,9 +281,12 @@ def redirect_logic_func(request):
     #print(filia)
     #send_mail('temat', filia, 'delphi', ['grzegorz.dziadkowiec@gmail.com'])
     #return HttpResponse(filia)
-    VCI = request.POST.get('salesPersonDistributor')
-    filia = strip_tags(request.POST.get('data'))
-    send_mail('temat', filia, 'delphi', ['grzegorz.dziadkowiec@delphi.com'])
+    filia = request.POST.get('data')
+    with open('demoVCImanage//templates//email.html', 'w', encoding='utf-8') as f:
+        f.write(filia)
+    rendered = render_to_string('emailhead.html') + render_to_string('email.html')
+    print(rendered)
+    send_mail('temat','', 'delphi', ['demovcimanage@gmail.com'], html_message=rendered)
 #    def get(self, request, form, **kwargs):
 #        cos1 = kwargs.get('pk')
 #        obj = VCI.objects.filter(VCInumber=cos1)

@@ -78,36 +78,42 @@
                 <td>{{ VCIUpdate.salesPersonDistributor.subsidiary.postal }}</td>
             </tr>
 
-          {% else %}
-          <tr>
-            <th>Nazwa warsztatu:</th>
-              <td>{{ VCIUpdate.workshop.workshopName }}</td>
-          </tr>
-          <tr>
-            <th>Ulica:</th>
-              <td>{{ VCIUpdate.workshop.street }}</td>
-          </tr>
-          <tr>
-            <th>Miasto:</th>
-              <td>{{ VCIUpdate.workshop.city }}</td>
-          </tr>
-          <tr>
-            <th>Kod pocztowy:</th>
-              <td>{{ VCIUpdate.workshop.postal }}</td>
-          </tr>
-          <tr>
-            <th>Osoba kontaktowa:</th>
-              <td>{{ VCIUpdate.workshop.contacName }} {{ VCIUpdate.workshop.contactSurname }}</td>
-          </tr>
-          <tr>
-            <th>Telefon:</th>
-              <td>{{ VCIUpdate.workshop.phone }}</td>
-          </tr>
-          <tr>
-            <th>e-mail:</th>
-              <td>{{ VCIUpdate.workshop.email }}</td>
-          </tr>
-          {% endif %}
+            {% elif VCIUpdate.workshop != none %}
+
+              <tr>
+                <th>Nazwa warsztatu:</th>
+                  <td>{{ VCIUpdate.workshop.workshopName }}</td>
+              </tr>
+              <tr>
+                <th>Ulica:</th>
+                  <td>{{ VCIUpdate.workshop.street }}</td>
+              </tr>
+              <tr>
+                <th>Miasto:</th>
+                  <td>{{ VCIUpdate.workshop.city }}</td>
+              </tr>
+              <tr>
+                <th>Kod pocztowy:</th>
+                  <td>{{ VCIUpdate.workshop.postal }}</td>
+              </tr>
+              <tr>
+                <th>Osoba kontaktowa:</th>
+                  <td>{{ VCIUpdate.workshop.contacName }} {{ VCIUpdate.workshop.contactSurname }}</td>
+              </tr>
+              <tr>
+                <th>Telefon:</th>
+                  <td>{{ VCIUpdate.workshop.phone }}</td>
+              </tr>
+              <tr>
+                <th>e-mail:</th>
+                  <td>{{ VCIUpdate.workshop.email }}</td>
+              </tr>
+            {% else %}
+              <tr>
+                <th>Kontakt:</th>
+                  <td>{{ VCIUpdate.salesPersonDelphi.name }}  {{ VCIUpdate.salesPersonDelphi.surname }}</td>
+              </tr>
+            {% endif %}
         </table>
       </div>
       <hr>
