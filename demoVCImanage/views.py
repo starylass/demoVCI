@@ -14,6 +14,7 @@ from django.utils.html import strip_tags
 import os
 import pathlib
 from django.template.loader import get_template
+from django.contrib.auth.models import User
 
 
 
@@ -127,7 +128,6 @@ class NewSalesPersonDistributor(BSModalCreateView):
     def get_context_data(self, **kwargs):
         context = super(NewSalesPersonDistributor, self).get_context_data(**kwargs)
         context['VCInumber'] = self.kwargs['pk']
-        print(self)
         return context
 
     def get_success_url(self):
@@ -283,10 +283,11 @@ def redirect_logic_func(request):
     #return HttpResponse(filia)
     vci = request.POST.get('vci')
     filia = request.POST.get('data')
+    current_user = request.user.email
     with open('demoVCImanage//templates//email.html', 'w', encoding='utf-8') as f:
         f.write(filia)
     rendered = render_to_string('emailhead.html') + render_to_string('email.html')
-    send_mail('Wysyłka testera: ' + vci,'', 'delphi', ['demovcimanage@gmail.com'], html_message=rendered)
+    send_mail('Wysyłka testera: ' + vci,'', 'delphi', [current_user], html_message=rendered)
 #    def get(self, request, form, **kwargs):
 #        cos1 = kwargs.get('pk')
 #        obj = VCI.objects.filter(VCInumber=cos1)
@@ -326,14 +327,12 @@ def load_salesPersonDistributorContact(request):
 
 def load_workshopAddressDelivery(request):
     workshop = request.GET.get('workshop')
-    print(workshop)
     workshopDelivery = Workshop.objects.filter(idWorkshop = workshop)
     return render(request, 'workshopDelivery.html', {'workshopDelivery': workshopDelivery})
 
 
 def load_workshops(request):
     workshops = Workshop.objects.all()
-    print(workshops)
     return render(request, 'workshop_drop_down.html', {'workshops': workshops})
 
 
