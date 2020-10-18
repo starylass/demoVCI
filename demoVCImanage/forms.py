@@ -76,6 +76,11 @@ class NewWorkshopFrom(forms.ModelForm):
         model = Workshop
         exclude = ['idWorkshop']
 
+    def __init__(self, *args, **kwargs):
+        super(NewWorkshopFrom, self).__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+
 
 
 class NewSalesPersonDistributor(BSModalModelForm):
