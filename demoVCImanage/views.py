@@ -286,7 +286,7 @@ def redirect_logic_func(request):
     with open('demoVCImanage//templates//email.html', 'w', encoding='utf-8') as f:
         f.write(filia)
     rendered = render_to_string('emailhead.html') + render_to_string('email.html')
-    send_mail('Wysyłka testera: ' + vci,'', 'delphi', ['demovcimanage@gmail.com'], html_message=rendered)
+    send_mail('Wysyłka testera: ' + vci,'', 'delphi', ['grzegorz.dziadkowiec@delphi.com'], html_message=rendered)
 #    def get(self, request, form, **kwargs):
 #        cos1 = kwargs.get('pk')
 #        obj = VCI.objects.filter(VCInumber=cos1)
