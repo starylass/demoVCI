@@ -145,6 +145,6 @@ EMAIL_HOST = 'smtp.googlemail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'demovcimanage@gmail.com'
-EMAIL_HOST_PASSWORD = 'pomidor22'
+EMAIL_HOST_PASSWORD = 'Pomidor22!'
 
 django_heroku.settings(locals())
