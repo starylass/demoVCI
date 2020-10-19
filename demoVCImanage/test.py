@@ -30,6 +30,31 @@ class VCIUpdateView(UpdateView):
             'VCIUpdate': VCIUpdate
         })
 
+    def post(self, request, *args, **kwargs):
+        vci = self.kwargs['pk']
+        VCIUpdate = VCI.objects.get(VCInumber = vci)
+        salesPersonDelphi = VCIset.salesPersonDelphi
+
+        form = _get_form(request, VCIModelForm, 'formv')
+        form2 = _get_form(request, NewSubsidiary, 'formw')
+        if form.is_bound and form.is_valid():
+            obj = form.save(commit=False)
+            obj.VCInumber = vci
+            obj.salesPersonDelphi = salesPersonDelphi
+            obj.lent = True
+            obj.lendDate = date.today()
+            try:
+                hist = obj.history.first()
+                hist.returnDate = date.today()
+                hist.save()
+            except AttributeError:
+                pass
+            obj.save()
+            return redirect('/VCI', vci)
+        elif form2.is_bound and form2.is_valid():
+            form2.save()
+            return redirect('VCIUpdate', vci)
+
     def form_valid(self, form):
         if form.is_valid():
             obj = form.save(commit=False)
